@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="blueCards.png">
+	<!-- Created with Adobe Flash Professional version 15.0.0.173 -->
+	<!-- http://www.adobe.com/products/flash.html -->
+	<SubTexture name="NumbersBlue0000" x="0" y="0" width="199" height="254" pivotX="99.5" pivotY="127"/>
+	<SubTexture name="NumbersBlue0001" x="199" y="0" width="199" height="254"/>
+	<SubTexture name="NumbersBlue0002" x="398" y="0" width="199" height="254"/>
+	<SubTexture name="NumbersBlue0003" x="597" y="0" width="199" height="254"/>
+	<SubTexture name="NumbersBlue0004" x="796" y="0" width="199" height="254"/>
+	<SubTexture name="NumbersBlue0005" x="0" y="254" width="199" height="254"/>
+	<SubTexture name="NumbersBlue0006" x="199" y="254" width="199" height="254"/>
+	<SubTexture name="NumbersBlue0007" x="398" y="254" width="199" height="254"/>
+	<SubTexture name="NumbersBlue0008" x="597" y="254" width="199" height="254"/>
+	<SubTexture name="NumbersBlue0009" x="796" y="254" width="199" height="254"/>
+	<SubTexture name="NumbersBlue0010" x="0" y="508" width="199" height="254"/>
+	<SubTexture name="NumbersBlue0011" x="199" y="508" width="199" height="254"/>
+	<SubTexture name="NumbersBlue0012" x="398" y="508" width="199" height="254"/>
+	<SubTexture name="NumbersBlue0013" x="597" y="508" width="199" height="254"/>
+	<SubTexture name="NumbersBlue0014" x="796" y="508" width="199" height="254"/>
+	<SubTexture name="NumbersBlue0015" x="0" y="762" width="199" height="254"/>
+</TextureAtlas>

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="globalCards.png">
+	<!-- Created with Adobe Flash Professional version 15.0.0.173 -->
+	<!-- http://www.adobe.com/products/flash.html -->
+	<SubTexture name="NumbersGlobal0000" x="0" y="0" width="199" height="254" pivotX="99.5" pivotY="127"/>
+	<SubTexture name="NumbersGlobal0001" x="199" y="0" width="199" height="254"/>
+	<SubTexture name="NumbersGlobal0002" x="0" y="254" width="199" height="254"/>
+</TextureAtlas>
