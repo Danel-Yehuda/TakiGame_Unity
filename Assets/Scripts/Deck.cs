@@ -8,6 +8,7 @@ public class Deck : MonoBehaviour
     public List<Card> cards = new List<Card>(); // The main deck of cards
     public Card cardPrefab;  // Drag your Card prefab here in the Inspector.
     public DiscardPile discardPile;
+    public HandManager playerHandManager;
 
     // Initialize the deck with all cards.
     private void Awake()
@@ -106,5 +107,16 @@ public class Deck : MonoBehaviour
             discardPile.AddCardToPile(startingCard);
         }
     }
+
+    public void PlayerDrawCard()
+    {
+        Card drawnCard = DrawCard();
+        if(drawnCard != null)
+        {
+            playerHandManager.AddCardToHand(drawnCard);
+            playerHandManager.playerHandManager.AdjustHandLayout();  // Adjust the player's hand layout after drawing a card.
+        }
+    }
+
 
 }

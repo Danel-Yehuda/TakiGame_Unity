@@ -9,6 +9,8 @@ public class HandManager : MonoBehaviour
     public Deck mainDeck;  // Reference to the main deck
     public bool isPlayerHand = true;  // Determine if this is a player's hand
     public Transform discardPileTransform;
+    public PlayerHandManager playerHandManager;
+
     private void Start()
     {
         DealInitialCards();
@@ -27,6 +29,7 @@ public class HandManager : MonoBehaviour
             newCard.tag = "PlayerCard";
             CardDragHandler dragHandler = newCard.AddComponent<CardDragHandler>();
             dragHandler.discardPileTransform = discardPileTransform;
+            dragHandler.playerHandManager = playerHandManager;
         }
         else
         {

@@ -4,15 +4,22 @@ using UnityEngine.EventSystems;
 public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private Vector2 originalPosition;
+    private Vector2 originalSize;  // To store the initial size of the card
+
     public Transform discardPileTransform;
+    public float dragWidth = 100f;  // Width of card when dragging
+    public float dragHeight = 150f;  // Height of card when dragging
     private Vector3 startPos;
     private Transform startParent;
     public bool isDroppedOnDiscardPile = false;
+    public PlayerHandManager playerHandManager;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log($"Dragging {this.GetComponent<CardDisplay>().cardData.cardColor} card");
         originalPosition = transform.position;
+        originalSize = (transform as RectTransform).sizeDelta;  // Capture the original size
+        (transform as RectTransform).sizeDelta = new Vector2(dragWidth, dragHeight);  // Set the drag size
         startPos = transform.position;
         startParent = transform.parent;
         GetComponent<CanvasGroup>().blocksRaycasts = false;
@@ -60,14 +67,19 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         transform.SetParent(discardPileTransform);
         transform.position = discardPileTransform.position;
-        transform.SetAsLastSibling();  // Makes sure the dragged card becomes the last child, hence the top card.
+        transform.SetAsLastSibling();
+
+        // Update the player's hand layout
+        playerHandManager.AdjustHandLayout();
     }
-
-
 
     private void ReturnToStartPosition()
     {
         transform.position = startPos;
         transform.SetParent(startParent);
+        (transform as RectTransform).sizeDelta = originalSize;  // Reset the size to the original value
+
+        // Update the player's hand layout
+        playerHandManager.AdjustHandLayout();
     }
 }
