@@ -10,9 +10,17 @@ public class HandManager : MonoBehaviour
     public bool isPlayerHand = true;  // Determine if this is a player's hand
     public Transform discardPileTransform;
     public PlayerHandManager playerHandManager;
+    public TheGameManager gameManager;  // Add a reference to TheGameManager
+
+    public List<Card> currentHand = new List<Card>(); // Store the current hand cards data
 
     private void Start()
     {
+        // Try to find the GameManager if it wasn't set in the inspector
+        if (!gameManager)
+        {
+            gameManager = FindObjectOfType<TheGameManager>();
+        }
         DealInitialCards();
     }
 
@@ -22,6 +30,8 @@ public class HandManager : MonoBehaviour
         
         CardDisplay cardDisplay = newCard.GetComponent<CardDisplay>();
         cardDisplay.cardData = cardData;
+        
+        currentHand.Add(cardData); // Add the card data to the current hand list
 
         if (isPlayerHand)
         {
@@ -30,6 +40,7 @@ public class HandManager : MonoBehaviour
             CardDragHandler dragHandler = newCard.AddComponent<CardDragHandler>();
             dragHandler.discardPileTransform = discardPileTransform;
             dragHandler.playerHandManager = playerHandManager;
+            dragHandler.gameManager = gameManager;  // Set the reference to the game manager
         }
         else
         {
@@ -50,6 +61,12 @@ public class HandManager : MonoBehaviour
 
     public void RemoveCardFromHand(GameObject card)
     {
+        CardDisplay cardDisplay = card.GetComponent<CardDisplay>();
+        if (currentHand.Contains(cardDisplay.cardData))
+        {
+            currentHand.Remove(cardDisplay.cardData); // Remove the card data from the current hand list
+        }
+
         Destroy(card);
     }
 

@@ -154,6 +154,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentTurn: 1
   turnIndicator: {fileID: 80853722}
+  playerHandManager: {fileID: 0}
+  computerHandManager: {fileID: 0}
 --- !u!4 &53386851
 Transform:
   m_ObjectHideFlags: 0
@@ -400,6 +402,8 @@ MonoBehaviour:
   isPlayerHand: 0
   discardPileTransform: {fileID: 1520612515}
   playerHandManager: {fileID: 907721807}
+  gameManager: {fileID: 53386850}
+  currentHand: []
 --- !u!114 &253648473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -698,6 +702,8 @@ MonoBehaviour:
   isPlayerHand: 1
   discardPileTransform: {fileID: 1520612515}
   playerHandManager: {fileID: 907721807}
+  gameManager: {fileID: 53386850}
+  currentHand: []
 --- !u!114 &907721806
 MonoBehaviour:
   m_ObjectHideFlags: 0

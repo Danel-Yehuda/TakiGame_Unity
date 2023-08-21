@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
 public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private Vector2 originalPosition;
@@ -13,6 +14,15 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public bool isDroppedOnDiscardPile = false;
     public PlayerHandManager playerHandManager;
     private HorizontalLayoutGroup handLayoutGroup;
+    public TheGameManager gameManager;
+
+    private void Awake()
+    {
+        if (!gameManager)
+        {
+            gameManager = FindObjectOfType<TheGameManager>();
+        }
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -44,16 +54,10 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             Transform lastChild = discardPileTransform.childCount > 0 ? discardPileTransform.GetChild(discardPileTransform.childCount - 1) : null;
             CardDisplay topCardDisplay = lastChild ? lastChild.GetComponent<CardDisplay>() : null;
 
-            if (topCardDisplay == null)
-            {
-                Debug.LogError("Top card does not have a CardDisplay component!");
-                ReturnToStartPosition();
-                return;
-            }
-
-            if (thisCardDisplay.cardData.CanBePlayedOn(topCardDisplay.cardData))
+            if (topCardDisplay == null || thisCardDisplay.cardData.CanBePlayedOn(topCardDisplay.cardData))
             {
                 DiscardThisCard();
+                gameManager.PlayCard(thisCardDisplay.cardData); // Inform the game manager that a card has been played.
             }
             else
             {

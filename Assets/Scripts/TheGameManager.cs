@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+
 public class TheGameManager : MonoBehaviour
 {
     public enum TurnState
@@ -12,7 +13,11 @@ public class TheGameManager : MonoBehaviour
     }
 
     public TurnState currentTurn;
-    public TMP_Text turnIndicator;  // Drag and drop your UI Text component here in the Inspector
+    public TMP_Text turnIndicator;  // UI Text component
+    public HandManager playerHandManager;
+    public HandManager computerHandManager;
+
+    private int extraTurns = 0;
 
     private void Start()
     {
@@ -20,9 +25,56 @@ public class TheGameManager : MonoBehaviour
         UpdateTurnIndicator();
     }
 
+    public void PlayCard(Card card) 
+    {
+        if(card.cardType == CardType.Taki)
+        {
+            HandleTakiCard(card.cardColor);
+        }
+        else if(card.cardType == CardType.Stop || card.cardType == CardType.ChangeDirection || card.cardType == CardType.Plus)
+        {
+            extraTurns++;
+        }
+
+        EndTurn();
+    }
+
+    private void HandleTakiCard(CardColor color)
+    {
+        HandManager activeHandManager = (currentTurn == TurnState.PLAYER_TURN) ? playerHandManager : computerHandManager;
+        List<Card> cardsToPlay = new List<Card>();
+            
+        // Find all cards of the same color
+        foreach(Transform child in activeHandManager.handTransform) 
+        {
+            Card cardInHand = child.GetComponent<Card>();
+            if(cardInHand && cardInHand.cardColor == color)
+            {
+                cardsToPlay.Add(cardInHand);
+            }
+        }
+
+        // Play the cards (or add logic to play them)
+        foreach(Card cardToPlay in cardsToPlay)
+        {
+            // Add your logic to play the card here. 
+            // For now, it just removes the card from the hand
+            GameObject cardObj = cardToPlay.gameObject; 
+            activeHandManager.RemoveCardFromHand(cardObj);
+        }
+
+        extraTurns += cardsToPlay.Count - 1;  // Taki itself is one turn, so subtract 1
+    }
+
+
     public void EndTurn()
     {
-        if (currentTurn == TurnState.PLAYER_TURN)
+        if (extraTurns > 0 && currentTurn == TurnState.PLAYER_TURN)
+        {
+            extraTurns--;
+            StartPlayerTurn();
+        }
+        else if (currentTurn == TurnState.PLAYER_TURN)
         {
             currentTurn = TurnState.COMPUTER_TURN;
             StartComputerTurn();
@@ -33,19 +85,18 @@ public class TheGameManager : MonoBehaviour
             StartPlayerTurn();
         }
 
-        UpdateTurnIndicator();  // Refresh the turn indicator when turns change
+        UpdateTurnIndicator();
     }
 
     private void StartPlayerTurn()
     {
-        // Logic for setting up the player's turn, if any
-        // Example: perhaps reset some timer, enable some player controls, etc.
+        // Logic for setting up the player's turn
     }
 
     private void StartComputerTurn()
     {
-        // Logic for setting up the computer's turn
-        // Example: Start some AI routines to decide what card to play
+        // Logic for the computer's turn
+        // Integrate your AI decision-making here
     }
 
     private void UpdateTurnIndicator()
