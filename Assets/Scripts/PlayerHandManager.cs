@@ -6,16 +6,22 @@ using UnityEngine.UI;
 public class PlayerHandManager : MonoBehaviour
 {
     [SerializeField] private HorizontalLayoutGroup layoutGroup;
-    [SerializeField] private float regularSpacing = 10f;  // Spacing for 6 or fewer cards
-    [SerializeField] private float regularSize = 1f;      // Scale for 6 or fewer cards
+    [SerializeField] private float regularSpacing = 10f;
+    [SerializeField] private float regularSize = 1f;
 
     private void Awake()
     {
         AdjustHandLayout();
     }
+
     private void Start()
     {
         AdjustHandLayout();
+    }
+
+    public HorizontalLayoutGroup GetHandLayoutGroup()
+    {
+        return layoutGroup;
     }
 
     public void AdjustHandLayout()
@@ -29,7 +35,6 @@ public class PlayerHandManager : MonoBehaviour
         }
         else
         {
-            // Set regular spacing and card size
             layoutGroup.childControlWidth = false;
             layoutGroup.spacing = regularSpacing;
             SetAllChildSize(regularSize);
