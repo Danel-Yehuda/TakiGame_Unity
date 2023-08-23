@@ -62,4 +62,14 @@ public class DiscardPile : MonoBehaviour, IDropHandler
             Destroy(child.gameObject);
         }
     }
+
+    public Card GetTopCard()
+    {
+        if (transform.childCount > 0)
+        {
+            return transform.GetChild(transform.childCount - 1).GetComponent<CardDisplay>().cardData;
+        }
+        return null;
+    }
+
 }

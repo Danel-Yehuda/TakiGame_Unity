@@ -152,10 +152,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7b839839e8da41b19672ccdab8c2691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentTurn: 1
+  currentTurn: 0
   turnIndicator: {fileID: 80853722}
-  playerHandManager: {fileID: 0}
-  computerHandManager: {fileID: 0}
+  computerHandManager: {fileID: 253648472}
+  discardPile: {fileID: 1520612518}
+  mainDeck: {fileID: 1138628866}
 --- !u!4 &53386851
 Transform:
   m_ObjectHideFlags: 0
@@ -403,7 +404,6 @@ MonoBehaviour:
   discardPileTransform: {fileID: 1520612515}
   playerHandManager: {fileID: 907721807}
   gameManager: {fileID: 53386850}
-  currentHand: []
 --- !u!114 &253648473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -703,7 +703,6 @@ MonoBehaviour:
   discardPileTransform: {fileID: 1520612515}
   playerHandManager: {fileID: 907721807}
   gameManager: {fileID: 53386850}
-  currentHand: []
 --- !u!114 &907721806
 MonoBehaviour:
   m_ObjectHideFlags: 0

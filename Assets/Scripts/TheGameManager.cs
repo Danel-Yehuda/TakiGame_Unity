@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class TheGameManager : MonoBehaviour
@@ -13,68 +10,28 @@ public class TheGameManager : MonoBehaviour
     }
 
     public TurnState currentTurn;
-    public TMP_Text turnIndicator;  // UI Text component
-    public HandManager playerHandManager;
-    public HandManager computerHandManager;
-
-    private int extraTurns = 0;
+    public TMP_Text turnIndicator;
+    public HandManager computerHandManager; // Drag the computer's HandManager here in the Inspector
+    public DiscardPile discardPile; // Drag the DiscardPile here in the Inspector
+    public Deck mainDeck; // Drag the main Deck here in the Inspector
 
     private void Start()
     {
-        currentTurn = TurnState.PLAYER_TURN;
+        currentTurn = (Random.value > 0.5f) ? TurnState.PLAYER_TURN : TurnState.COMPUTER_TURN;
         UpdateTurnIndicator();
+        if (currentTurn == TurnState.COMPUTER_TURN)
+        {
+            StartComputerTurn();
+        }
+        else
+        {
+            PromptPlayerTurn();
+        }
     }
-
-    public void PlayCard(Card card) 
-    {
-        if(card.cardType == CardType.Taki)
-        {
-            HandleTakiCard(card.cardColor);
-        }
-        else if(card.cardType == CardType.Stop || card.cardType == CardType.ChangeDirection || card.cardType == CardType.Plus)
-        {
-            extraTurns++;
-        }
-
-        EndTurn();
-    }
-
-    private void HandleTakiCard(CardColor color)
-    {
-        HandManager activeHandManager = (currentTurn == TurnState.PLAYER_TURN) ? playerHandManager : computerHandManager;
-        List<Card> cardsToPlay = new List<Card>();
-            
-        // Find all cards of the same color
-        foreach(Transform child in activeHandManager.handTransform) 
-        {
-            Card cardInHand = child.GetComponent<Card>();
-            if(cardInHand && cardInHand.cardColor == color)
-            {
-                cardsToPlay.Add(cardInHand);
-            }
-        }
-
-        // Play the cards (or add logic to play them)
-        foreach(Card cardToPlay in cardsToPlay)
-        {
-            // Add your logic to play the card here. 
-            // For now, it just removes the card from the hand
-            GameObject cardObj = cardToPlay.gameObject; 
-            activeHandManager.RemoveCardFromHand(cardObj);
-        }
-
-        extraTurns += cardsToPlay.Count - 1;  // Taki itself is one turn, so subtract 1
-    }
-
 
     public void EndTurn()
     {
-        if (extraTurns > 0 && currentTurn == TurnState.PLAYER_TURN)
-        {
-            extraTurns--;
-            StartPlayerTurn();
-        }
-        else if (currentTurn == TurnState.PLAYER_TURN)
+        if (currentTurn == TurnState.PLAYER_TURN)
         {
             currentTurn = TurnState.COMPUTER_TURN;
             StartComputerTurn();
@@ -82,10 +39,15 @@ public class TheGameManager : MonoBehaviour
         else
         {
             currentTurn = TurnState.PLAYER_TURN;
-            StartPlayerTurn();
+            PromptPlayerTurn();
         }
 
         UpdateTurnIndicator();
+    }
+
+    private void PromptPlayerTurn()
+    {
+        Debug.Log("Player's turn! Play a card or skip.");
     }
 
     private void StartPlayerTurn()
@@ -95,8 +57,41 @@ public class TheGameManager : MonoBehaviour
 
     private void StartComputerTurn()
     {
-        // Logic for the computer's turn
-        // Integrate your AI decision-making here
+        Invoke("ComputerPlayCard", 1f);
+    }
+
+    private void ComputerPlayCard()
+    {
+        Card topDiscard = discardPile.GetTopCard(); // Assuming you have a method in DiscardPile to get the top card
+
+        foreach (Transform cardTransform in computerHandManager.handTransform)
+        {
+            Card card = cardTransform.GetComponent<CardDisplay>().cardData;
+            if (card.CanBePlayedOn(topDiscard))
+            {
+                PlayCard(cardTransform.gameObject);
+                return;
+            }
+        }
+
+        Card drawnCard = mainDeck.DrawCard();
+        if (drawnCard.CanBePlayedOn(topDiscard))
+        {
+            computerHandManager.AddCardToHand(drawnCard);
+            PlayCard(drawnCard.gameObject);
+        }
+        else
+        {
+            EndTurn();
+        }
+    }
+
+    private void PlayCard(GameObject cardGameObject)
+    {
+        cardGameObject.transform.SetParent(discardPile.transform);
+        cardGameObject.transform.position = discardPile.transform.position;
+        computerHandManager.RemoveCardFromHand(cardGameObject);
+        EndTurn();
     }
 
     private void UpdateTurnIndicator()
