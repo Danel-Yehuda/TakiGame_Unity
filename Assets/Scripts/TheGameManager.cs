@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class TheGameManager : MonoBehaviour
 {
@@ -12,9 +13,10 @@ public class TheGameManager : MonoBehaviour
     public TurnState currentTurn;
     public TMP_Text turnIndicator;
     public HandManager computerHandManager; // Drag the computer's HandManager here in the Inspector
+    public HandManager playerHandManager; //
     public DiscardPile discardPile; // Drag the DiscardPile here in the Inspector
     public Deck mainDeck; // Drag the main Deck here in the Inspector
-
+    private int turnsToSkip = 0;
     private void Start()
     {
         currentTurn = (Random.value > 0.5f) ? TurnState.PLAYER_TURN : TurnState.COMPUTER_TURN;
@@ -31,19 +33,27 @@ public class TheGameManager : MonoBehaviour
 
     public void EndTurn()
     {
-        if (currentTurn == TurnState.PLAYER_TURN)
+        if (turnsToSkip > 0)
         {
-            currentTurn = TurnState.COMPUTER_TURN;
-            StartComputerTurn();
+            turnsToSkip--;
         }
         else
         {
-            currentTurn = TurnState.PLAYER_TURN;
-            PromptPlayerTurn();
+            if (currentTurn == TurnState.PLAYER_TURN)
+            {
+                currentTurn = TurnState.COMPUTER_TURN;
+                StartComputerTurn();
+            }
+            else
+            {
+                currentTurn = TurnState.PLAYER_TURN;
+                PromptPlayerTurn();
+            }
         }
-
         UpdateTurnIndicator();
     }
+
+
 
     private void PromptPlayerTurn()
     {
@@ -71,7 +81,16 @@ public class TheGameManager : MonoBehaviour
             if (card.CanBePlayedOn(topDiscard))
             {
                 PlayCard(cardTransform.gameObject);
-                EndTurn();  // End the turn after playing the card
+                
+                // Handle the special ability for the computer's card
+                HandleSpecialAbility(card, TheGameManager.TurnState.COMPUTER_TURN);
+                
+                // If the card doesn't have a special ability that affects turn order, end the computer's turn
+                if (card.cardType != CardType.Stop && card.cardType != CardType.Plus && card.cardType != CardType.ChangeDirection)
+                {
+                    EndTurn();
+                }
+                
                 return;
             }
         }
@@ -81,6 +100,7 @@ public class TheGameManager : MonoBehaviour
         computerHandManager.AddCardToHand(drawnCard); // Add the drawn card to the computer's hand
         EndTurn();
     }
+
 
 
 
@@ -101,4 +121,71 @@ public class TheGameManager : MonoBehaviour
     {
         turnIndicator.text = (currentTurn == TurnState.PLAYER_TURN) ? "Your Turn" : "Computer's Turn";
     }
+
+    public void HandleSpecialAbility(Card card, TurnState turnState)
+    {
+        switch (card.cardType)
+        {
+            case CardType.Stop:
+                turnsToSkip = 1;
+                break;
+            case CardType.Plus:
+                turnsToSkip = 1;
+                break;
+            case CardType.ChangeDirection:
+                turnsToSkip = 1;
+                break;
+            case CardType.Taki:
+                if (turnState == TurnState.COMPUTER_TURN)
+                {
+                    // Allow the computer to play all cards of the same color
+                    PlayAllSameColorCards(card.cardColor);
+                }
+                else
+                {
+                    // Count the player's cards of the same color as the Taki card
+                    int sameColorCount = CountPlayerCardsOfColor(card.cardColor);
+                    Debug.Log(sameColorCount);
+                    turnsToSkip = sameColorCount - 1; // -1 because the current turn is already the player's
+                }
+                break;
+        }
+    }
+
+    private int CountPlayerCardsOfColor(CardColor color)
+    {
+        int count = 0;
+        foreach (Transform cardTransform in playerHandManager.handTransform)
+        {
+            Card card = cardTransform.GetComponent<CardDisplay>().cardData;
+            if (card.cardColor == color)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+
+
+    private void PlayAllSameColorCards(CardColor color)
+    {
+        // Get all cards of the same color from the player's hand
+        List<GameObject> sameColorCards = new List<GameObject>();
+        foreach (Transform cardTransform in computerHandManager.handTransform)
+        {
+            Card card = cardTransform.GetComponent<CardDisplay>().cardData;
+            if (card.cardColor == color)
+            {
+                sameColorCards.Add(cardTransform.gameObject);
+            }
+        }
+
+        // Play all the same color cards
+        foreach (GameObject cardGameObject in sameColorCards)
+        {
+            PlayCard(cardGameObject);
+        }
+    }
+
 }

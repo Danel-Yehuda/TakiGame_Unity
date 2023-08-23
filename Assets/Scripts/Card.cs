@@ -70,6 +70,11 @@ public class Card : MonoBehaviour
         }
     }
 
+    public bool HasSpecialAbility()
+    {
+        return cardType == CardType.Stop || cardType == CardType.Plus || cardType == CardType.ChangeDirection || cardType == CardType.Taki;
+    }
+
 
     public bool CanBePlayedOn(Card otherCard)
     {

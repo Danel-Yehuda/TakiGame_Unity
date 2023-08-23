@@ -54,6 +54,9 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             if (thisCardDisplay.cardData.CanBePlayedOn(topCardDisplay.cardData))
             {
                 DiscardThisCard();
+                
+                gameManager.HandleSpecialAbility(thisCardDisplay.cardData, TheGameManager.TurnState.PLAYER_TURN);
+
                 gameManager.EndTurn();  // End the player's turn after playing a card
             }
             else

@@ -938,6 +938,7 @@ MonoBehaviour:
   cardPrefab: {fileID: 828025210}
   discardPile: {fileID: 1520612518}
   playerHandManager: {fileID: 907721805}
+  gameManager: {fileID: 53386850}
 --- !u!114 &1138628867
 MonoBehaviour:
   m_ObjectHideFlags: 0
