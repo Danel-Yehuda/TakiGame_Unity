@@ -20,7 +20,7 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         handLayoutGroup = playerHandManager.GetHandLayoutGroup();
         handLayoutGroup.enabled = false;
 
-        Debug.Log($"Dragging {this.GetComponent<CardDisplay>().cardData.cardColor} card");
+        //Debug.Log($"Dragging {this.GetComponent<CardDisplay>().cardData.cardColor} card");
         originalPosition = transform.position;
         originalSize = (transform as RectTransform).sizeDelta;
         (transform as RectTransform).sizeDelta = new Vector2(dragWidth, dragHeight);

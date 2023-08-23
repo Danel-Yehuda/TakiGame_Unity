@@ -17,27 +17,31 @@ public class HandManager : MonoBehaviour
         DealInitialCards();
     }
 
-    public void AddCardToHand(Card cardData)
+    public GameObject AddCardToHand(Card cardData)
     {
         GameObject newCard = Instantiate(cardPrefab, handTransform);
         CardDisplay cardDisplay = newCard.GetComponent<CardDisplay>();
         cardDisplay.cardData = cardData;
 
-        CardDragHandler dragHandler = newCard.AddComponent<CardDragHandler>();
-        dragHandler.discardPileTransform = discardPileTransform;
-        dragHandler.playerHandManager = playerHandManager;
-        dragHandler.gameManager = gameManager;  // Set the gameManager reference for both player and computer
-
         if (isPlayerHand)
         {
             cardDisplay.UpdateCardUI(cardDisplay.cardData);
             newCard.tag = "PlayerCard";
+            
+            CardDragHandler dragHandler = newCard.AddComponent<CardDragHandler>();
+            dragHandler.discardPileTransform = discardPileTransform;
+            dragHandler.playerHandManager = playerHandManager;
+            
+            dragHandler.gameManager = gameManager;  // Set the gameManager reference here
         }
         else
         {
             cardDisplay.HideCard();
         }
+
+        return newCard;
     }
+
 
 
 
@@ -46,7 +50,7 @@ public class HandManager : MonoBehaviour
         for (int i = 0; i < 7; i++)
         {
             Card cardToDeal = mainDeck.DrawCard();
-            Debug.Log(cardToDeal);
+            //Debug.Log(cardToDeal);
             if (cardToDeal != null)
                 AddCardToHand(cardToDeal);
         }

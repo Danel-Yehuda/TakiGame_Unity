@@ -60,6 +60,7 @@ public class TheGameManager : MonoBehaviour
         Invoke("ComputerPlayCard", 1f);
     }
 
+
     private void ComputerPlayCard()
     {
         Card topDiscard = discardPile.GetTopCard(); // Assuming you have a method in DiscardPile to get the top card
@@ -70,29 +71,31 @@ public class TheGameManager : MonoBehaviour
             if (card.CanBePlayedOn(topDiscard))
             {
                 PlayCard(cardTransform.gameObject);
+                EndTurn();  // End the turn after playing the card
                 return;
             }
         }
 
+        // If no playable card in hand, draw a card and end the turn
         Card drawnCard = mainDeck.DrawCard();
-        if (drawnCard.CanBePlayedOn(topDiscard))
-        {
-            computerHandManager.AddCardToHand(drawnCard);
-            PlayCard(drawnCard.gameObject);
-        }
-        else
-        {
-            EndTurn();
-        }
+        computerHandManager.AddCardToHand(drawnCard); // Add the drawn card to the computer's hand
+        EndTurn();
     }
+
+
+
 
     private void PlayCard(GameObject cardGameObject)
     {
-        cardGameObject.transform.SetParent(discardPile.transform);
-        cardGameObject.transform.position = discardPile.transform.position;
+        Card cardData = cardGameObject.GetComponent<CardDisplay>().cardData;
+
+        // Remove from computer's hand
         computerHandManager.RemoveCardFromHand(cardGameObject);
-        EndTurn();
+
+        // Add to discard pile and show the card
+        discardPile.AddCardFromComputer(cardData);
     }
+
 
     private void UpdateTurnIndicator()
     {

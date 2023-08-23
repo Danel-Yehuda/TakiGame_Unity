@@ -320,6 +320,7 @@ GameObject:
   - component: {fileID: 253648470}
   - component: {fileID: 253648472}
   - component: {fileID: 253648473}
+  - component: {fileID: 253648474}
   m_Layer: 5
   m_Name: ComputerArea
   m_TagString: Untagged
@@ -430,6 +431,21 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &253648474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 253648468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88fc2d8b3e0cd4ef984b5a447eee9038, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layoutGroup: {fileID: 253648473}
+  regularSpacing: 0
+  regularSize: 1
 --- !u!1 &701137962
 GameObject:
   m_ObjectHideFlags: 0

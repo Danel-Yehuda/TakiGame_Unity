@@ -27,7 +27,7 @@ public class DiscardPile : MonoBehaviour, IDropHandler
 
             if (draggedCardDisplay.cardData.CanBePlayedOn(topCardDisplay.cardData))
             {
-                Debug.Log("Card can be played on top!");
+                //Debug.Log("Card can be played on top!");
                 cardDrag.isDroppedOnDiscardPile = true;
                 // Don't set the parent here. We'll handle it in the CardDragHandler.
             }
@@ -40,9 +40,9 @@ public class DiscardPile : MonoBehaviour, IDropHandler
 
     public void AddCardToPile(Card cardData)
     {
-        Debug.Log("Adding card to pile");
+        //Debug.Log("Adding card to pile");
         ClearPile();
-        Debug.Log("Number of children after clear: " + topCardTransform.childCount);
+        //Debug.Log("Number of children after clear: " + topCardTransform.childCount);
 
         GameObject newCard = Instantiate(cardPrefab, topCardTransform.position, Quaternion.identity, topCardTransform);
         CardDisplay cardDisplay = newCard.GetComponent<CardDisplay>();
@@ -71,5 +71,14 @@ public class DiscardPile : MonoBehaviour, IDropHandler
         }
         return null;
     }
+
+    public void AddCardFromComputer(Card cardData)
+    {
+        GameObject newCard = Instantiate(cardPrefab, topCardTransform.position, Quaternion.identity, topCardTransform);
+        CardDisplay cardDisplay = newCard.GetComponent<CardDisplay>();
+        cardDisplay.cardData = cardData;
+        cardDisplay.UpdateCardUI();  // This will show the actual card image
+    }
+
 
 }

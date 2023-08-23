@@ -27,7 +27,7 @@ public class PlayerHandManager : MonoBehaviour
     public void AdjustHandLayout()
     {
         int cardCount = transform.childCount;
-        Debug.Log(cardCount);
+        //Debug.Log(cardCount);
 
         if (cardCount >= 7)
         {
