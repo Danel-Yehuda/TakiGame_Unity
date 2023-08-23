@@ -11,9 +11,13 @@ public class HandManager : MonoBehaviour
     public Transform discardPileTransform;
     public PlayerHandManager playerHandManager;
     public TheGameManager gameManager;
-
+    
     private void Start()
     {
+        if (!playerHandManager)
+        {
+            playerHandManager = GetComponent<PlayerHandManager>();
+        }
         DealInitialCards();
     }
 
@@ -39,6 +43,11 @@ public class HandManager : MonoBehaviour
             cardDisplay.HideCard();
         }
 
+        if (playerHandManager)
+        {
+            playerHandManager.AdjustHandLayout();
+        }
+
         return newCard;
     }
 
@@ -59,6 +68,11 @@ public class HandManager : MonoBehaviour
     public void RemoveCardFromHand(GameObject card)
     {
         Destroy(card);
+        
+        if (playerHandManager)
+        {
+            playerHandManager.AdjustHandLayout();
+        }
     }
 
     public void ShowAllCards()

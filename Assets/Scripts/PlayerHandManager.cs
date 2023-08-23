@@ -9,6 +9,7 @@ public class PlayerHandManager : MonoBehaviour
     [SerializeField] private float regularSpacing = 10f;
     [SerializeField] private float regularSize = 1f;
 
+
     private void Awake()
     {
         AdjustHandLayout();

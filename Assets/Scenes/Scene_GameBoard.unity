@@ -403,7 +403,7 @@ MonoBehaviour:
   mainDeck: {fileID: 1138628866}
   isPlayerHand: 0
   discardPileTransform: {fileID: 1520612515}
-  playerHandManager: {fileID: 907721807}
+  playerHandManager: {fileID: 253648474}
   gameManager: {fileID: 53386850}
 --- !u!114 &253648473
 MonoBehaviour:
