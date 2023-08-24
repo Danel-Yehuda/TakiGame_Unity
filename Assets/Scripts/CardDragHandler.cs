@@ -46,7 +46,7 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
             if (topCardDisplay == null)
             {
-                Debug.LogError("Top card does not have a CardDisplay component!");
+                //Debug.LogError("Top card does not have a CardDisplay component!");
                 ReturnToStartPosition();
                 return;
             }

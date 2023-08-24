@@ -40,7 +40,8 @@ public class HandManager : MonoBehaviour
         }
         else
         {
-            cardDisplay.HideCard();
+            //cardDisplay.HideCard();
+            cardDisplay.UpdateCardUI(cardDisplay.cardData);
         }
 
         if (playerHandManager)

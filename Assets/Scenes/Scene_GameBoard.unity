@@ -155,6 +155,7 @@ MonoBehaviour:
   currentTurn: 0
   turnIndicator: {fileID: 80853722}
   computerHandManager: {fileID: 253648472}
+  playerHandManager: {fileID: 907721805}
   discardPile: {fileID: 1520612518}
   mainDeck: {fileID: 1138628866}
 --- !u!4 &53386851

@@ -17,6 +17,7 @@ public class TheGameManager : MonoBehaviour
     public DiscardPile discardPile; // Drag the DiscardPile here in the Inspector
     public Deck mainDeck; // Drag the main Deck here in the Inspector
     private int turnsToSkip = 0;
+    
     private void Start()
     {
         currentTurn = (Random.value > 0.5f) ? TurnState.PLAYER_TURN : TurnState.COMPUTER_TURN;
@@ -36,6 +37,11 @@ public class TheGameManager : MonoBehaviour
         if (turnsToSkip > 0)
         {
             turnsToSkip--;
+            if (currentTurn == TurnState.COMPUTER_TURN)
+            {
+                StartComputerTurn();
+                return;  // Exit the method early to prevent switching the turn to the player
+            }
         }
         else
         {
@@ -73,7 +79,7 @@ public class TheGameManager : MonoBehaviour
 
     private void ComputerPlayCard()
     {
-        Card topDiscard = discardPile.GetTopCard(); // Assuming you have a method in DiscardPile to get the top card
+        Card topDiscard = discardPile.GetTopCard();
 
         foreach (Transform cardTransform in computerHandManager.handTransform)
         {
@@ -81,24 +87,33 @@ public class TheGameManager : MonoBehaviour
             if (card.CanBePlayedOn(topDiscard))
             {
                 PlayCard(cardTransform.gameObject);
-                
-                // Handle the special ability for the computer's card
                 HandleSpecialAbility(card, TheGameManager.TurnState.COMPUTER_TURN);
-                
-                // If the card doesn't have a special ability that affects turn order, end the computer's turn
-                if (card.cardType != CardType.Stop && card.cardType != CardType.Plus && card.cardType != CardType.ChangeDirection)
+                if (turnsToSkip > 0)
+                {
+                    turnsToSkip--;  // Decrement turnsToSkip here
+                    StartComputerTurn();
+                    return;
+                }
+                else
                 {
                     EndTurn();
+                    return;
                 }
-                
-                return;
             }
         }
 
-        // If no playable card in hand, draw a card and end the turn
+        // If no playable card in hand, draw a card
         Card drawnCard = mainDeck.DrawCard();
-        computerHandManager.AddCardToHand(drawnCard); // Add the drawn card to the computer's hand
-        EndTurn();
+        computerHandManager.AddCardToHand(drawnCard);
+        if (turnsToSkip > 0)
+        {
+            turnsToSkip--;  // Decrement turnsToSkip here
+            StartComputerTurn();
+        }
+        else
+        {
+            EndTurn();
+        }
     }
 
 
@@ -132,9 +147,6 @@ public class TheGameManager : MonoBehaviour
             case CardType.Plus:
                 turnsToSkip = 1;
                 break;
-            case CardType.ChangeDirection:
-                turnsToSkip = 1;
-                break;
             case CardType.Taki:
                 if (turnState == TurnState.COMPUTER_TURN)
                 {
@@ -146,7 +158,7 @@ public class TheGameManager : MonoBehaviour
                     // Count the player's cards of the same color as the Taki card
                     int sameColorCount = CountPlayerCardsOfColor(card.cardColor);
                     Debug.Log(sameColorCount);
-                    turnsToSkip = sameColorCount - 1; // -1 because the current turn is already the player's
+                    turnsToSkip = sameColorCount;
                 }
                 break;
         }

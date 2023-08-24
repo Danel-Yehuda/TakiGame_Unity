@@ -53,7 +53,7 @@ public class Card : MonoBehaviour
                 path += cardColor.ToString() + "_ChangeColor";
                 break;
             default:
-                Debug.LogError("Unknown card type: " + cardType);
+                //Debug.LogError("Unknown card type: " + cardType);
                 return;
         }
 
@@ -81,32 +81,32 @@ public class Card : MonoBehaviour
         // Cards with the same color can always be played on each other.
         if (this.cardColor == otherCard.cardColor)
         {
-            Debug.Log($"Matching Color: {this.cardColor} == {otherCard.cardColor}");
+            //Debug.Log($"Matching Color: {this.cardColor} == {otherCard.cardColor}");
             return true;
         }
 
         // Number cards can be played on other cards with the same number.
         if (this.cardType == CardType.Number && this.cardNumber == otherCard.cardNumber)
         {
-            Debug.Log($"Matching Number: {this.cardNumber} == {otherCard.cardNumber}");
+            //Debug.Log($"Matching Number: {this.cardNumber} == {otherCard.cardNumber}");
             return true;
         }
 
         // Cards with the same type (except Number) can be played on each other.
         if (this.cardType == otherCard.cardType && this.cardType != CardType.Number)
         {
-            Debug.Log($"Matching Card Type: {this.cardType}");
+            //Debug.Log($"Matching Card Type: {this.cardType}");
             return true;
         }
 
         // ChangeColor cards can be played on any card.
         if (this.cardType == CardType.ChangeColor)
         {
-            Debug.Log("Playing a ChangeColor card.");
+            //Debug.Log("Playing a ChangeColor card.");
             return true;
         }
 
-        Debug.Log($"No match: Color - {this.cardColor} vs {otherCard.cardColor}, Number - {this.cardNumber} vs {otherCard.cardNumber}");
+        //Debug.Log($"No match: Color - {this.cardColor} vs {otherCard.cardColor}, Number - {this.cardNumber} vs {otherCard.cardNumber}");
         return false;  // If none of the above conditions are met, the card cannot be played.
 }
 
