@@ -17,6 +17,8 @@ public class TheGameManager : MonoBehaviour
     public DiscardPile discardPile; // Drag the DiscardPile here in the Inspector
     public Deck mainDeck; // Drag the main Deck here in the Inspector
     private int turnsToSkip = 0;
+    public int consecutivePlusTwoCount = 0;
+
     
     private void Start()
     {
@@ -63,6 +65,22 @@ public class TheGameManager : MonoBehaviour
 
     private void PromptPlayerTurn()
     {
+        if (consecutivePlusTwoCount > 0)
+        {
+            if (!PlayerHasPlusTwoCard())
+            {
+                Debug.Log("You don't have a +2 card. You must draw cards.");
+                for (int i = 0; i < 2 * consecutivePlusTwoCount; i++)
+                {
+                    Card drawnCard = mainDeck.DrawCard();
+                    playerHandManager.AddCardToHand(drawnCard);
+                }
+                consecutivePlusTwoCount = 0; // Reset the count
+                EndTurn();
+                return;
+            }
+        }
+
         Debug.Log("Player's turn! Play a card or skip.");
     }
 
@@ -80,6 +98,33 @@ public class TheGameManager : MonoBehaviour
     private void ComputerPlayCard()
     {
         Card topDiscard = discardPile.GetTopCard();
+        Card drawnCard;
+
+        if (consecutivePlusTwoCount > 0)
+        {
+            // Check if the computer has a +2 card to play
+            foreach (Transform cardTransform in computerHandManager.handTransform)
+            {
+                Card card = cardTransform.GetComponent<CardDisplay>().cardData;
+                if (card.cardType == CardType.Number && card.cardNumber == 2)
+                {
+                    PlayCard(cardTransform.gameObject);
+                    HandleSpecialAbility(card, TheGameManager.TurnState.COMPUTER_TURN);
+                    EndTurn();
+                    return;
+                }
+            }
+
+            // If the computer doesn't have a +2 card, draw the required number of cards and end the turn
+            for (int i = 0; i < 2 * consecutivePlusTwoCount; i++)
+            {
+                drawnCard = mainDeck.DrawCard();
+                computerHandManager.AddCardToHand(drawnCard);
+            }
+            consecutivePlusTwoCount = 0; // Reset the count
+            EndTurn();
+            return;
+        }
 
         foreach (Transform cardTransform in computerHandManager.handTransform)
         {
@@ -103,7 +148,7 @@ public class TheGameManager : MonoBehaviour
         }
 
         // If no playable card in hand, draw a card
-        Card drawnCard = mainDeck.DrawCard();
+        drawnCard = mainDeck.DrawCard();
         computerHandManager.AddCardToHand(drawnCard);
         if (turnsToSkip > 0)
         {
@@ -147,6 +192,12 @@ public class TheGameManager : MonoBehaviour
             case CardType.Plus:
                 turnsToSkip = 1;
                 break;
+            case CardType.Number:
+                if (card.cardNumber == 2)
+                {
+                    consecutivePlusTwoCount++;
+                }
+                break;
             case CardType.Taki:
                 if (turnState == TurnState.COMPUTER_TURN)
                 {
@@ -162,6 +213,19 @@ public class TheGameManager : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public bool PlayerHasPlusTwoCard()
+    {
+        foreach (Transform cardTransform in playerHandManager.handTransform)
+        {
+            Card card = cardTransform.GetComponent<CardDisplay>().cardData;
+            if (card.cardType == CardType.Number && card.cardNumber == 2)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private int CountPlayerCardsOfColor(CardColor color)

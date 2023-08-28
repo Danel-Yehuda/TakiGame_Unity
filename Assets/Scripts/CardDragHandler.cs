@@ -14,6 +14,7 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public PlayerHandManager playerHandManager;
     private HorizontalLayoutGroup handLayoutGroup;
     public TheGameManager gameManager;
+    public Deck mainDeck;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -37,6 +38,13 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void OnEndDrag(PointerEventData eventData)
     {
         handLayoutGroup.enabled = true;
+
+        if (gameManager.consecutivePlusTwoCount > 0 && !gameManager.PlayerHasPlusTwoCard())
+        {
+            // If there are +2 cards played and the player doesn't have a +2 card, they can only draw cards.
+            mainDeck.PlayerDrawCard();
+            return;
+        }
 
         if (isDroppedOnDiscardPile)
         {

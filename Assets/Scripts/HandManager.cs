@@ -35,7 +35,7 @@ public class HandManager : MonoBehaviour
             CardDragHandler dragHandler = newCard.AddComponent<CardDragHandler>();
             dragHandler.discardPileTransform = discardPileTransform;
             dragHandler.playerHandManager = playerHandManager;
-            
+            dragHandler.mainDeck = mainDeck;
             dragHandler.gameManager = gameManager;  // Set the gameManager reference here
         }
         else
