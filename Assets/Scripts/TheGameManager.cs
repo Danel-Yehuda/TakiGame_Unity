@@ -206,7 +206,7 @@ public class TheGameManager : MonoBehaviour
             case CardType.SuperChangeColor:
                 if (turnState == TurnState.PLAYER_TURN)
                 {
-                    colorSelectionPanel.ShowPanel();
+                    colorSelectionPanel.ShowPanelForSuperChangeColor();
                 }
                 else
                 {
@@ -228,6 +228,19 @@ public class TheGameManager : MonoBehaviour
                     turnsToSkip = sameColorCount;
                 }
                 break;
+            case CardType.SuperTaki:
+                if (turnState == TurnState.PLAYER_TURN)
+                {
+                    colorSelectionPanel.ShowPanelForSuperTaki();  // Show the color selection panel
+                }
+                else
+                {
+                    // For the computer, choose a random color
+                    CardColor[] colors = (CardColor[])System.Enum.GetValues(typeof(CardColor));
+                    CardColor randomColor = colors[Random.Range(0, colors.Length)];
+                    ChangeDiscardPileToTaki(randomColor);
+                }
+                break;
         }
     }
 
@@ -244,6 +257,17 @@ public class TheGameManager : MonoBehaviour
     }
 
 
+    public void ChangeDiscardPileToTaki(CardColor chosenColor)
+    {
+        Card takiCard = Instantiate(cardPrefab).GetComponent<Card>();
+        takiCard.cardType = CardType.Taki;
+        takiCard.cardColor = chosenColor;
+        takiCard.AssignCardImage();
+
+        discardPile.AddCardToPile(takiCard);
+        turnsToSkip--;
+        HandleSpecialAbility(takiCard, currentTurn);
+    }
 
 
 

@@ -11,28 +11,54 @@ public class ColorSelectionPanel : MonoBehaviour
     public Button blueButton;
     public Button yellowButton;
 
+    private enum PanelMode
+    {
+        SuperChangeColor,
+        SuperTaki
+    }
+
+    private PanelMode currentMode;
+
     private void Start()
     {
-        redButton.onClick.AddListener(() => SelectColor(CardColor.Red));
-        greenButton.onClick.AddListener(() => SelectColor(CardColor.Green));
-        blueButton.onClick.AddListener(() => SelectColor(CardColor.Blue));
-        yellowButton.onClick.AddListener(() => SelectColor(CardColor.Yellow));
+        redButton.onClick.AddListener(() => HandleColorSelection(CardColor.Red));
+        greenButton.onClick.AddListener(() => HandleColorSelection(CardColor.Green));
+        blueButton.onClick.AddListener(() => HandleColorSelection(CardColor.Blue));
+        yellowButton.onClick.AddListener(() => HandleColorSelection(CardColor.Yellow));
 
         gameObject.SetActive(false); // Hide the panel by default
     }
 
+    public void ShowPanelForSuperChangeColor()
+    {
+        currentMode = PanelMode.SuperChangeColor;
+        ShowPanel();
+    }
+
+    public void ShowPanelForSuperTaki()
+    {
+        currentMode = PanelMode.SuperTaki;
+        ShowPanel();
+    }
+
     public void ShowPanel()
     {
-        Debug.Log("SuperChangeColor card played!");
+        Debug.Log(currentMode == PanelMode.SuperChangeColor ? "SuperChangeColor card played!" : "SuperTaki card played!");
         gameObject.SetActive(true);
     }
 
-    private void SelectColor(CardColor color)
+    private void HandleColorSelection(CardColor color)
     {
-        gameManager.ChangeDiscardPileColor(color);
+        switch (currentMode)
+        {
+            case PanelMode.SuperChangeColor:
+                gameManager.ChangeDiscardPileColor(color);
+                gameManager.EndTurn();
+                break;
+            case PanelMode.SuperTaki:
+                gameManager.ChangeDiscardPileToTaki(color);
+                break;
+        }
         gameObject.SetActive(false); // Hide the panel after selection
-        gameManager.EndTurn();
     }
-
 }
-

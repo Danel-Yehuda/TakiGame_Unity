@@ -18,7 +18,8 @@ public enum CardType
     Plus,
     ChangeDirection,
     ChangeColor,
-    SuperChangeColor
+    SuperChangeColor,
+    SuperTaki
 }
 
 public class Card : MonoBehaviour
@@ -55,6 +56,9 @@ public class Card : MonoBehaviour
                 break;
             case CardType.SuperChangeColor:
                 path += "ChangeColor";
+                break;
+            case CardType.SuperTaki:
+                path += "SuperTaki";
                 break;
             default:
                 //Debug.LogError("Unknown card type: " + cardType);
@@ -111,6 +115,11 @@ public class Card : MonoBehaviour
         }
 
         if (this.cardType == CardType.SuperChangeColor)
+        {
+            return true;
+        }
+
+        if (this.cardType == CardType.SuperTaki)
         {
             return true;
         }

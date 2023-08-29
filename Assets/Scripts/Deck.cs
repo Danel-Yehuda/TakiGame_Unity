@@ -76,6 +76,12 @@ public class Deck : MonoBehaviour
         superChangeColorCard.AssignCardImage(); // Make sure you have an image for this card type
         cards.Add(superChangeColorCard);
 
+        // Create SuperTaki card
+        Card superTakiCard = Instantiate(cardPrefab);
+        superTakiCard.cardType = CardType.SuperTaki;
+        superTakiCard.AssignCardImage(); // Make sure you have an image for this card type
+        cards.Add(superTakiCard);
+
 
         ShuffleDeck();
     }
