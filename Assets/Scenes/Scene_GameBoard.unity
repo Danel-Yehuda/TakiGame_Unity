@@ -159,6 +159,9 @@ MonoBehaviour:
   discardPile: {fileID: 1520612518}
   mainDeck: {fileID: 1138628866}
   consecutivePlusTwoCount: 0
+  colorSelectionPanel: {fileID: 89524666}
+  cardUIPrefab: {fileID: 2139916799}
+  cardPrefab: {fileID: 828025205}
 --- !u!4 &53386851
 Transform:
   m_ObjectHideFlags: 0
@@ -320,13 +323,14 @@ GameObject:
   - component: {fileID: 89524663}
   - component: {fileID: 89524665}
   - component: {fileID: 89524664}
+  - component: {fileID: 89524666}
   m_Layer: 5
   m_Name: ColorSelectionPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &89524663
 RectTransform:
   m_ObjectHideFlags: 0
@@ -389,6 +393,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 89524662}
   m_CullTransparentMesh: 1
+--- !u!114 &89524666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89524662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb00f05072e1d4c85836792612486624, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 53386850}
+  redButton: {fileID: 1163348324}
+  greenButton: {fileID: 1283267728}
+  blueButton: {fileID: 540705815}
+  yellowButton: {fileID: 1183312307}
 --- !u!1 &253648468
 GameObject:
   m_ObjectHideFlags: 0

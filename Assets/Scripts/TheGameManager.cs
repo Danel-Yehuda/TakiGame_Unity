@@ -12,19 +12,16 @@ public class TheGameManager : MonoBehaviour
 
     public TurnState currentTurn;
     public TMP_Text turnIndicator;
-    public HandManager computerHandManager; // Drag the computer's HandManager here in the Inspector
-    public HandManager playerHandManager; //
-    public DiscardPile discardPile; // Drag the DiscardPile here in the Inspector
-    public Deck mainDeck; // Drag the main Deck here in the Inspector
+    public HandManager computerHandManager; 
+    public HandManager playerHandManager; 
+    public DiscardPile discardPile; 
+    public Deck mainDeck;
     private int turnsToSkip = 0;
     public int consecutivePlusTwoCount = 0;
     public ColorSelectionPanel colorSelectionPanel;
     public GameObject cardUIPrefab;
     public GameObject cardPrefab;
 
-
-
-    
     private void Start()
     {
         currentTurn = (Random.value > 0.5f) ? TurnState.PLAYER_TURN : TurnState.COMPUTER_TURN;
@@ -67,7 +64,6 @@ public class TheGameManager : MonoBehaviour
     }
 
 
-
     private void PromptPlayerTurn()
     {
         if (consecutivePlusTwoCount > 0)
@@ -98,7 +94,6 @@ public class TheGameManager : MonoBehaviour
     {
         Invoke("ComputerPlayCard", 1f);
     }
-
 
     private void ComputerPlayCard()
     {
@@ -157,7 +152,7 @@ public class TheGameManager : MonoBehaviour
         computerHandManager.AddCardToHand(drawnCard);
         if (turnsToSkip > 0)
         {
-            turnsToSkip--;  // Decrement turnsToSkip here
+            turnsToSkip--;
             StartComputerTurn();
         }
         else
@@ -165,10 +160,6 @@ public class TheGameManager : MonoBehaviour
             EndTurn();
         }
     }
-
-
-
-
 
     private void PlayCard(GameObject cardGameObject)
     {
@@ -180,7 +171,6 @@ public class TheGameManager : MonoBehaviour
         // Add to discard pile and show the card
         discardPile.AddCardFromComputer(cardData);
     }
-
 
     private void UpdateTurnIndicator()
     {
