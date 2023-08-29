@@ -21,6 +21,7 @@ public class TheGameManager : MonoBehaviour
     public ColorSelectionPanel colorSelectionPanel;
     public GameObject cardUIPrefab;
     public GameObject cardPrefab;
+    
 
     private void Start()
     {
@@ -92,6 +93,7 @@ public class TheGameManager : MonoBehaviour
 
     private void StartComputerTurn()
     {
+        computerHandManager.playerHandManager.AdjustHandLayout();
         Invoke("ComputerPlayCard", 1f);
     }
 
@@ -122,6 +124,7 @@ public class TheGameManager : MonoBehaviour
                 computerHandManager.AddCardToHand(drawnCard);
             }
             consecutivePlusTwoCount = 0; // Reset the count
+            computerHandManager.playerHandManager.AdjustHandLayout();
             EndTurn();
             return;
         }
@@ -141,6 +144,7 @@ public class TheGameManager : MonoBehaviour
                 }
                 else
                 {
+                    computerHandManager.playerHandManager.AdjustHandLayout();
                     EndTurn();
                     return;
                 }
@@ -308,6 +312,7 @@ public class TheGameManager : MonoBehaviour
         {
             PlayCard(cardGameObject);
         }
+        computerHandManager.playerHandManager.AdjustHandLayout();
     }
 
 }
