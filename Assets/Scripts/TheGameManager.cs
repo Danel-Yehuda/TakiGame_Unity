@@ -18,6 +18,11 @@ public class TheGameManager : MonoBehaviour
     public Deck mainDeck; // Drag the main Deck here in the Inspector
     private int turnsToSkip = 0;
     public int consecutivePlusTwoCount = 0;
+    public ColorSelectionPanel colorSelectionPanel;
+    public GameObject cardUIPrefab;
+    public GameObject cardPrefab;
+
+
 
     
     private void Start()
@@ -81,7 +86,7 @@ public class TheGameManager : MonoBehaviour
             }
         }
 
-        Debug.Log("Player's turn! Play a card or skip.");
+        //Debug.Log("Player's turn! Play a card or skip.");
     }
 
     private void StartPlayerTurn()
@@ -198,6 +203,17 @@ public class TheGameManager : MonoBehaviour
                     consecutivePlusTwoCount++;
                 }
                 break;
+            case CardType.SuperChangeColor:
+                if (turnState == TurnState.PLAYER_TURN)
+                {
+                    colorSelectionPanel.ShowPanel();
+                }
+                else
+                {
+                    CardColor randomColor = (CardColor)Random.Range(0, 4); // Randomly select a color for the computer
+                    ChangeDiscardPileColor(randomColor);
+                }
+                break;
             case CardType.Taki:
                 if (turnState == TurnState.COMPUTER_TURN)
                 {
@@ -214,6 +230,22 @@ public class TheGameManager : MonoBehaviour
                 break;
         }
     }
+
+    public void ChangeDiscardPileColor(CardColor newColor)
+    {
+        // Create a new ChangeColor card
+        Card changeColorCard = Instantiate(cardPrefab).GetComponent<Card>();
+        changeColorCard.cardType = CardType.ChangeColor;
+        changeColorCard.cardColor = newColor;
+        changeColorCard.AssignCardImage();
+
+        // Add the new card to the discard pile
+        discardPile.AddCardToPile(changeColorCard);
+    }
+
+
+
+
 
     public bool PlayerHasPlusTwoCard()
     {

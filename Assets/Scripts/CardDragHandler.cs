@@ -65,7 +65,10 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 
                 gameManager.HandleSpecialAbility(thisCardDisplay.cardData, TheGameManager.TurnState.PLAYER_TURN);
 
-                gameManager.EndTurn();  // End the player's turn after playing a card
+                if (thisCardDisplay.cardData.cardType != CardType.SuperChangeColor)
+                {
+                    gameManager.EndTurn();  // End the player's turn after playing a card
+                }  
             }
             else
             {

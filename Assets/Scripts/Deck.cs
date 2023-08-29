@@ -70,6 +70,13 @@ public class Deck : MonoBehaviour
         changeColorCard.AssignCardImage();
         cards.Add(changeColorCard);
 
+        // Create SuperChangeColor card
+        Card superChangeColorCard = Instantiate(cardPrefab);
+        superChangeColorCard.cardType = CardType.SuperChangeColor;
+        superChangeColorCard.AssignCardImage(); // Make sure you have an image for this card type
+        cards.Add(superChangeColorCard);
+
+
         ShuffleDeck();
     }
 

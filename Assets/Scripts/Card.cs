@@ -17,7 +17,8 @@ public enum CardType
     Stop,
     Plus,
     ChangeDirection,
-    ChangeColor
+    ChangeColor,
+    SuperChangeColor
 }
 
 public class Card : MonoBehaviour
@@ -51,6 +52,9 @@ public class Card : MonoBehaviour
                 break;
             case CardType.ChangeColor:
                 path += cardColor.ToString() + "_ChangeColor";
+                break;
+            case CardType.SuperChangeColor:
+                path += "ChangeColor";
                 break;
             default:
                 //Debug.LogError("Unknown card type: " + cardType);
@@ -103,6 +107,11 @@ public class Card : MonoBehaviour
         if (this.cardType == CardType.ChangeColor)
         {
             //Debug.Log("Playing a ChangeColor card.");
+            return true;
+        }
+
+        if (this.cardType == CardType.SuperChangeColor)
+        {
             return true;
         }
 

@@ -6,6 +6,10 @@ TagManager:
   tags:
   - DiscardPile
   - PlayerCard
+  - Red
+  - Green
+  - Blue
+  - Yellow
   layers:
   - Default
   - TransparentFX
