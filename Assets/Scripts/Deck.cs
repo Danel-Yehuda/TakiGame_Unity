@@ -131,6 +131,7 @@ public class Deck : MonoBehaviour
             playerHandManager.playerHandManager.AdjustHandLayout();  // Adjust the player's hand layout after drawing a card.
         }
         gameManager.EndTurn();
+        gameManager.CheckForWinner();
     }
 
 

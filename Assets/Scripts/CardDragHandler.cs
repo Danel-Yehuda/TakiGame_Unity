@@ -18,6 +18,11 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (gameManager.currentTurn != TheGameManager.TurnState.PLAYER_TURN)
+        {
+            return;
+        }
+        if (gameManager.isGameOver) return;
         handLayoutGroup = playerHandManager.GetHandLayoutGroup();
         handLayoutGroup.enabled = false;
 
@@ -32,6 +37,11 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (gameManager.currentTurn != TheGameManager.TurnState.PLAYER_TURN)
+        {
+            return;
+        }
+        if (gameManager.isGameOver) return;
         transform.position = eventData.position;
     }
 
@@ -80,6 +90,7 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             ReturnToStartPosition();
         }
 
+        gameManager.CheckForWinner();
         GetComponent<CanvasGroup>().blocksRaycasts = true;
     }
 

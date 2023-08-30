@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
-
+using UnityEngine.UI;
 public class TheGameManager : MonoBehaviour
 {
     public enum TurnState
@@ -21,6 +21,9 @@ public class TheGameManager : MonoBehaviour
     public ColorSelectionPanel colorSelectionPanel;
     public GameObject cardUIPrefab;
     public GameObject cardPrefab;
+    public TMP_Text winnerText;
+    public Button restartButton;
+    public bool isGameOver = false;
     
 
     private void Start()
@@ -39,6 +42,7 @@ public class TheGameManager : MonoBehaviour
 
     public void EndTurn()
     {
+        CheckForWinner();
         if (turnsToSkip > 0)
         {
             turnsToSkip--;
@@ -67,6 +71,7 @@ public class TheGameManager : MonoBehaviour
 
     private void PromptPlayerTurn()
     {
+        if (isGameOver) return;
         if (consecutivePlusTwoCount > 0)
         {
             if (!PlayerHasPlusTwoCard())
@@ -93,6 +98,7 @@ public class TheGameManager : MonoBehaviour
 
     private void StartComputerTurn()
     {
+        if (isGameOver) return;
         computerHandManager.playerHandManager.AdjustHandLayout();
         Invoke("ComputerPlayCard", 1f);
     }
@@ -112,6 +118,7 @@ public class TheGameManager : MonoBehaviour
                 {
                     PlayCard(cardTransform.gameObject);
                     HandleSpecialAbility(card, TheGameManager.TurnState.COMPUTER_TURN);
+                    CheckForWinner();
                     EndTurn();
                     return;
                 }
@@ -125,6 +132,7 @@ public class TheGameManager : MonoBehaviour
             }
             consecutivePlusTwoCount = 0; // Reset the count
             computerHandManager.playerHandManager.AdjustHandLayout();
+            CheckForWinner();
             EndTurn();
             return;
         }
@@ -145,6 +153,7 @@ public class TheGameManager : MonoBehaviour
                 else
                 {
                     computerHandManager.playerHandManager.AdjustHandLayout();
+                    CheckForWinner();
                     EndTurn();
                     return;
                 }
@@ -154,6 +163,7 @@ public class TheGameManager : MonoBehaviour
         // If no playable card in hand, draw a card
         drawnCard = mainDeck.DrawCard();
         computerHandManager.AddCardToHand(drawnCard);
+        CheckForWinner();
         if (turnsToSkip > 0)
         {
             turnsToSkip--;
@@ -161,6 +171,7 @@ public class TheGameManager : MonoBehaviour
         }
         else
         {
+            CheckForWinner();
             EndTurn();
         }
     }
@@ -174,6 +185,7 @@ public class TheGameManager : MonoBehaviour
 
         // Add to discard pile and show the card
         discardPile.AddCardFromComputer(cardData);
+        CheckForWinner();
     }
 
     private void UpdateTurnIndicator()
@@ -314,5 +326,47 @@ public class TheGameManager : MonoBehaviour
         }
         computerHandManager.playerHandManager.AdjustHandLayout();
     }
+
+    public void CheckForWinner()
+    {
+        if (playerHandManager.handTransform.childCount == 0)
+        {
+            // Player wins
+            DisplayWinner("Player Wins!");
+
+            // Optionally, you can add more logic here, like stopping the game or showing a restart button.
+            StopGame();
+            restartButton.gameObject.SetActive(true);
+        }
+        else if (computerHandManager.handTransform.childCount == 0)
+        {
+            // Computer wins
+            DisplayWinner("Computer Wins!");
+
+            // Optionally, you can add more logic here, like stopping the game or showing a restart button.
+            StopGame();
+            restartButton.gameObject.SetActive(true);
+        }
+    }
+
+    private void DisplayWinner(string message)
+    {
+        winnerText.text = message;
+        winnerText.gameObject.SetActive(true);
+        // Optionally, you can add more logic here, like stopping the game or showing a restart button.
+    }
+
+    private void StopGame()
+    {
+        isGameOver = true;
+        Debug.Log("Game Over!");
+    }
+
+    public void RestartGame()
+    {
+        // Reload the current scene to restart the game
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
+
 
 }
