@@ -105,12 +105,19 @@ public class Deck : MonoBehaviour
     // Draw a card from the top of the deck.
     public Card DrawCard()
     {
-        if (cards.Count == 0) return null;
+        Debug.Log(cards.Count);
+        if (cards.Count == 0)
+        {
+            RefillDeckFromDiscardPile();
+        }
+
+        if (cards.Count == 0) return null;  // Check again in case the discard pile was also empty
 
         Card drawnCard = cards[cards.Count - 1];
         cards.RemoveAt(cards.Count - 1);
         return drawnCard;
     }
+
 
     public void StartGame()
     {
@@ -133,6 +140,26 @@ public class Deck : MonoBehaviour
         gameManager.EndTurn();
         gameManager.CheckForWinner();
     }
+
+    private void RefillDeckFromDiscardPile()
+    {
+        if (discardPile.discardedCards.Count <= 1) return;  // If there's only one card (or none), we can't refill the deck
+
+        // Keep the top card of the discard pile
+        Card topCard = discardPile.discardedCards[discardPile.discardedCards.Count - 1];
+        discardPile.discardedCards.RemoveAt(discardPile.discardedCards.Count - 1);
+
+        // Move the rest of the cards to the main deck
+        cards.AddRange(discardPile.discardedCards);
+        discardPile.discardedCards.Clear();
+
+        // Add the top card back to the discard pile
+        discardPile.discardedCards.Add(topCard);
+
+        // Shuffle the main deck
+        ShuffleDeck();
+    }
+
 
 
 }

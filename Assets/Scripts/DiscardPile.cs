@@ -8,6 +8,8 @@ public class DiscardPile : MonoBehaviour, IDropHandler
     public GameObject cardPrefab; 
     public Transform topCardTransform;
     public Transform initialTopCard;  // Reference to the initial top card
+    public List<Card> discardedCards = new List<Card>();
+
 
     public void OnDrop(PointerEventData eventData)
     {
@@ -53,6 +55,7 @@ public class DiscardPile : MonoBehaviour, IDropHandler
         {
             initialTopCard = newCard.transform;
         }
+        discardedCards.Add(cardData);
     }
 
     public void ClearPile()
@@ -78,6 +81,7 @@ public class DiscardPile : MonoBehaviour, IDropHandler
         CardDisplay cardDisplay = newCard.GetComponent<CardDisplay>();
         cardDisplay.cardData = cardData;
         cardDisplay.UpdateCardUI();  // This will show the actual card image
+        discardedCards.Add(cardData);
     }
 
 
